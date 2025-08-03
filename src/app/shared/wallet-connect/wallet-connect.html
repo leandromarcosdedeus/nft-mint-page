@@ -1,0 +1,7 @@
+<div class="wallet-connect">
+  <button *ngIf="!(walletAddress$ | async)" (click)="connectWallet()">Conectar Wallet</button>
+
+  <div *ngIf="walletAddress$ | async as address">
+    {{ address}}...{{ address  }}
+  </div>
+</div>

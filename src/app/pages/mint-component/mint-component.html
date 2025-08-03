@@ -1,1 +1,50 @@
-<p>mint-component works!</p>
+<div class="home-wrapper">
+  <h1 class="title">Japanese Wild Cats</h1>
+  
+  <!-- Carrossel Container -->
+  <div class="carousel-container">
+    <div class="carousel-wrapper">
+      <div class="carousel-track" [style.transform]="'translateX(-' + (currentIndex * (100 / totalSlides)) + '%)'">
+        <div *ngFor="let nft of nfts; let i = index" 
+             class="nft-card" 
+             [class.active]="i >= currentIndex && i < currentIndex + totalSlides">
+          <div class="new-tag" *ngIf="i < 3">NEW</div>
+          <img [src]="nft.image" [alt]="nft.name" class="nft-image" />
+          <div class="nft-info">
+            <h2>{{ nft.name }}</h2>
+            <p>{{ nft.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controles de Navegação -->
+    <div class="carousel-controls">
+      <button class="nav-btn prev-btn" 
+              [class.disabled]="!canGoPrev()"
+              [disabled]="!canGoPrev()"
+              (click)="prevSlide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      <div class="dot-indicators">
+        <button *ngFor="let dot of getDotIndicators(); let i = index" 
+                class="dot" 
+                [class.active]="i === getCurrentDotIndex()"
+                (click)="goToSlide(i * totalSlides)">
+        </button>
+      </div>
+      
+      <button class="nav-btn next-btn" 
+              [class.disabled]="!canGoNext()"
+              [disabled]="!canGoNext()"
+              (click)="nextSlide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
