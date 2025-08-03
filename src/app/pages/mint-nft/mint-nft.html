@@ -1,0 +1,63 @@
+<div class="mint-page">
+  <div class="mint-container">
+    <h1 class="page-title">Mintar NFT</h1>
+    
+    <!-- Seleção de NFT -->
+    <div class="nft-selection">
+      <h2>Selecione um NFT para mintar:</h2>
+      <div class="nft-grid">
+        <div *ngFor="let nft of nfts" 
+             class="nft-card" 
+             [class.selected]="selectedNft?.id === nft.id"
+             (click)="selectNft(nft)">
+          <div class="new-tag" *ngIf="nft.id <= 2">NEW</div>
+          <img [src]="nft.image" [alt]="nft.name" class="nft-image" />
+          <div class="nft-info">
+            <h3>{{ nft.name }}</h3>
+            <p>{{ nft.description }}</p>
+            <div class="price">{{ nft.price }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Área de Mint -->
+    <div class="mint-section" *ngIf="selectedNft">
+      <div class="selected-nft">
+        <h3>NFT Selecionado:</h3>
+        <div class="selected-card">
+          <img [src]="selectedNft.image" [alt]="selectedNft.name" />
+          <div class="selected-info">
+            <h4>{{ selectedNft.name }}</h4>
+            <p>{{ selectedNft.description }}</p>
+            <div class="price">{{ selectedNft.price }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mint-actions">
+        <button class="mint-btn" 
+                [disabled]="isMinting"
+                (click)="mintNft()">
+          <span *ngIf="!isMinting">Mintar NFT</span>
+          <span *ngIf="isMinting">Mintando...</span>
+        </button>
+        
+        <div class="mint-status" *ngIf="mintStatus">
+          {{ mintStatus }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Instruções -->
+    <div class="instructions" *ngIf="!selectedNft">
+      <h3>Como mintar:</h3>
+      <ol>
+        <li>Selecione um NFT da lista acima</li>
+        <li>Conecte sua carteira (MetaMask)</li>
+        <li>Confirme a transação</li>
+        <li>Aguarde a confirmação na blockchain</li>
+      </ol>
+    </div>
+  </div>
+</div>

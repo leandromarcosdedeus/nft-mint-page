@@ -3,8 +3,8 @@
   
   <!-- Carrossel Container -->
   <div class="carousel-container">
-    <div class="carousel-wrapper">
-      <div class="carousel-track" [style.transform]="'translateX(-' + (currentIndex * (100 / totalSlides)) + '%)'">
+    <div class="carousel-wrapper" #carouselWrapper>
+      <div class="carousel-track">
         <div *ngFor="let nft of nfts; let i = index" 
              class="nft-card" 
              [class.active]="i >= currentIndex && i < currentIndex + totalSlides">
@@ -33,7 +33,7 @@
         <button *ngFor="let dot of getDotIndicators(); let i = index" 
                 class="dot" 
                 [class.active]="i === getCurrentDotIndex()"
-                (click)="goToSlide(i * totalSlides)">
+                (click)="goToSlide(i)">
         </button>
       </div>
       

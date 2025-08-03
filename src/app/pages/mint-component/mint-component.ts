@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { ethers } from 'ethers';
 import { CommonModule } from '@angular/common';
 
@@ -19,7 +19,8 @@ export interface NFT {
 export class MintComponent {
    nfts: NFT[] = [];
    currentIndex: number = 0;
-   totalSlides: number = 3;
+   totalSlides: number = 4.5;
+   @ViewChild('carouselWrapper') carouselWrapper!: ElementRef;
 
   ngOnInit(): void {
     this.nfts = [
@@ -63,35 +64,53 @@ export class MintComponent {
   }
 
   nextSlide(): void {
-    const maxIndex = this.nfts.length - this.totalSlides;
-    this.currentIndex = Math.min(this.currentIndex + 1, maxIndex);
+    if (this.carouselWrapper) {
+      const cardWidth = 280 + 8; // card width + gap (0.5rem = 8px)
+      const scrollAmount = cardWidth * 1.5; // Scroll 1.5 cards
+      this.carouselWrapper.nativeElement.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   }
 
   prevSlide(): void {
-    this.currentIndex = Math.max(this.currentIndex - 1, 0);
+    if (this.carouselWrapper) {
+      const cardWidth = 280 + 8; // card width + gap (0.5rem = 8px)
+      const scrollAmount = cardWidth * 1.5; // Scroll 1.5 cards
+      this.carouselWrapper.nativeElement.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   }
 
   goToSlide(index: number): void {
-    this.currentIndex = index;
+    if (this.carouselWrapper) {
+      const cardWidth = 280 + 8; // card width + gap (0.5rem = 8px)
+      const scrollAmount = cardWidth * index;
+      this.carouselWrapper.nativeElement.scrollTo({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   }
 
   getVisibleSlides(): NFT[] {
-    const startIndex = this.currentIndex;
-    const endIndex = Math.min(startIndex + this.totalSlides, this.nfts.length);
-    return this.nfts.slice(startIndex, endIndex);
+    return this.nfts;
   }
 
   getDotIndicators(): number[] {
-    const totalPages = Math.ceil(this.nfts.length / this.totalSlides);
-    return Array.from({ length: totalPages }, (_, i) => i);
+    // Um dot para cada card
+    return Array.from({ length: this.nfts.length }, (_, i) => i);
   }
 
   getCurrentDotIndex(): number {
-    return Math.floor(this.currentIndex / this.totalSlides);
+    return this.currentIndex;
   }
 
   canGoNext(): boolean {
-    return this.currentIndex < this.nfts.length - this.totalSlides;
+    return this.currentIndex < this.nfts.length - 1;
   }
 
   canGoPrev(): boolean {
